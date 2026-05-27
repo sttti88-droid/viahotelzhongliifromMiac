@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Via Hotel Zhongli - Smart Companion</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#f2f7f5',
+                            100: '#e1ede8',
+                            800: '#113826',
+                            900: '#0b261a'
+                        },
+                        amber: {
+                            500: '#d9a74a',
+                            600: '#c29136',
+                            700: '#9e7323'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        serif: ['Cinzel', 'Noto Serif TC', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=600;800&family=Noto+Sans+TC:wght=400;500;700&family=Noto+Serif+TC:wght=600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f2f7f5; -webkit-tap-highlight-color: transparent; }
+        .luxury-title { font-family: 'Cinzel', 'Noto Serif TC', serif; }
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Checkbox Styles */
+        .checkbox-container { cursor: pointer; user-select: none; }
+        .real-checkbox:checked + .custom-box { background-color: #113826; border-color: #113826; }
+        .real-checkbox:checked + .custom-box i { opacity: 1; transform: scale(1); }
+
+        /* Accordion Style Overrides */
+        details summary::-webkit-details-marker { display: none; }
+        details[open] summary i.fa-chevron-down { transform: rotate(180deg); }
+    </style>
+</head>
+<body class="text-emerald-900 pb-28 min-h-screen">
+
+    <!-- TOP FIXED HEADER -->
+    <header class="bg-emerald-900 text-white sticky top-0 z-40 px-4 py-4 text-center shadow-md border-b border-amber-600/30">
+        <div class="max-w-md mx-auto">
+            <h1 class="luxury-title text-base font-bold tracking-wider text-amber-500">VIA HOTEL ZHONGLI 丰居中壢館</h1>
+            <p class="text-[10px] text-emerald-100/70 font-mono mt-0.5">Smart Travel Companion 旅程隨身管家 製作BY MIA</p>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+
+        <!-- ==================== 1. PLAN PAGE (行程表 + 飯店簡介 + 機場與捷運) ==================== -->
+        <section id="page-plan" class="page-content active space-y-4">
+            
+            <!-- Hotel Profile Card -->
+            <div class="bg-white rounded-2xl p-4 border border-amber-600/30 shadow-sm space-y-3">
+                <div class="flex items-center gap-2 border-b border-emerald-50 pb-2">
+                    <span class="text-amber-600 text-lg"><i class="fa-solid fa-hotel"></i></span>
+                    <h2 class="luxury-title text-sm font-bold text-emerald-900">About Via Hotel Zhongli / 關於丰居</h2>
+                </div>
+                <div class="text-xs space-y-2">
+                    <p class="font-bold text-emerald-950 flex items-center gap-1">
+                        <i class="fa-solid fa-map-location-dot text-emerald-800"></i>
+                        <span>桃園市中壢區新興路194巷5號 (No. 5, Ln. 194, Xinxing Rd., Zhongli Dist.)</span>
+                    </p>
+                    <p class="font-bold text-emerald-950 flex items-center gap-1">
+                        <i class="fa-solid fa-phone text-emerald-800"></i>
+                        <a href="tel:+88634575222" class="text-amber-600 underline">+886-3-457-5222</a>
+                    </p>
+                    <p class="text-emerald-700 leading-relaxed text-[11px] pt-1 border-t border-emerald-50/50">
+                        中壢後火車站步行僅需 1 分鐘。我們為各國旅人提供具設計感、溫馨且全方位的現代化智能商旅體驗，是您探索台灣最安心的家。<br>
+                        <span class="text-emerald-600 block mt-1">Just a 1-minute walk from Zhongli Rear Station. We provide cozy, high-tech, and thoughtfully designed accommodations for global travelers.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 【新增】桃園國際機場與機場捷運核心資訊區塊 -->
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 text-white rounded-2xl p-4 border border-amber-500/20 shadow-md space-y-3">
+                <div class="flex items-center gap-2 border-b border-emerald-700/60 pb-2">
+                    <span class="text-amber-400 text-base"><i class="fa-solid fa-plane-departure"></i></span>
+                    <h3 class="luxury-title text-xs font-bold text-amber-400 tracking-wider">Airport & Metro Transit / 機場與交通資訊</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <!-- 桃園機場航班資訊 -->
+                    <div class="bg-emerald-900/60 p-2.5 rounded-xl border border-emerald-800 space-y-1">
+                        <span class="font-bold text-white block"><i class="fa-solid fa-circle-info text-amber-500 mr-1"></i>桃園國際機場</span>
+                        <p class="text-[10px] text-emerald-200">即時航班起降與出入境動態查詢</p>
+                        <a href="https://www.taoyuan-airport.com/flight_arrival" target="_blank" class="inline-flex items-center gap-1 text-[10px] bg-amber-500 text-emerald-950 px-2 py-0.5 rounded font-bold mt-1 shadow-sm">航班動態 <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i></a>
+                    </div>
+                    <!-- 桃園機場捷運資訊 -->
+                    <div class="bg-emerald-900/60 p-2.5 rounded-xl border border-emerald-800 space-y-1">
+                        <span class="font-bold text-white block"><i class="fa-solid fa-train-subway text-amber-500 mr-1"></i>桃園機場捷運</span>
+                        <p class="text-[10px] text-emerald-200">票價、發車時刻表與路線圖指南</p>
+                        <a href="https://www.tymetro.com.tw/tymetro-new/tw/_pages/travel-guide/road.html" target="_blank" class="inline-flex items-center gap-1 text-[10px] bg-amber-500 text-emerald-950 px-2 py-0.5 rounded font-bold mt-1 shadow-sm">捷運指南 <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i></a>
+                    </div>
+                </div>
+                <p class="text-[10px] text-emerald-300/80 leading-tight"><i class="fa-solid fa-lightbulb text-amber-400 mr-0.5"></i> 貼心提醒：從飯店可搭乘台鐵區間車至「桃園火車站」或「高鐵桃園站(青埔)」轉乘機場捷運，或直接預約計程車直達機場最便利。</p>
+            </div>
+
+            <!-- Flight & Info Input Card -->
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-3.5">
+                <div class="flex items-start gap-3">
+                    <div class="bg-emerald-50 text-emerald-800 p-2 rounded-xl border border-emerald-100"><i class="fa-solid fa-plane"></i></div>
+                    <div class="text-xs flex-1">
+                        <span class="font-bold block text-emerald-900 text-sm">Flight Information 航班資訊</span>
+                        <textarea id="input-flight" oninput="saveCoreInfo('flight', this.value)" class="w-full bg-emerald-50/50 rounded-lg p-2 mt-1 text-emerald-800 focus:outline-none focus:ring-1 focus:ring-amber-500 border border-transparent" rows="2" placeholder="[ 請自行填寫航班往返詳細資訊 / Enter your flight details... ]"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Timelines -->
+            <div class="space-y-3.5">
+                <div class="flex justify-between items-center">
+                    <h2 class="luxury-title text-base font-bold text-emerald-800 border-l-4 border-amber-600 pl-2">Daily Itinerary 每日行程</h2>
+                    <button onclick="addNewItinerary()" class="text-xs bg-emerald-800 text-amber-500 font-bold px-3 py-1.5 rounded-xl shadow-sm"><i class="fa-solid fa-plus mr-1"></i>Add Day 新增天數</button>
+                </div>
+                <div id="itinerary-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 2. GUIDE PAGE (手風琴深度導覽) ==================== -->
+        <section id="page-guide" class="page-content space-y-4">
+            <div class="bg-emerald-900 text-white p-4 rounded-2xl shadow-md border border-amber-600/20 text-center">
+                <h3 class="luxury-title text-xl font-bold text-amber-500 tracking-widest">ZHONGLI EXCLUSIVE GUIDE</h3>
+                <p class="text-[10px] text-emerald-100/70 font-mono mt-0.5">吃、喝、玩、樂、生活 深度隨身指南</p>
+            </div>
+
+            <!-- 地圖區域 -->
+            <div class="bg-white p-2.5 rounded-2xl border border-emerald-100 shadow-sm space-y-1.5">
+                <span class="text-[11px] text-emerald-800 font-bold block"><i class="fa-solid fa-map-location-dot text-amber-600 mr-1"></i>Interactive Map 中壢區域互動地圖</span>
+                <div class="rounded-xl overflow-hidden h-40 border border-emerald-100">
+                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=121.1950%2C24.9450%2C121.2400%2C24.9950&layer=mapnik"></iframe>
+                </div>
+            </div>
+
+            <!-- ==================== 四大摺疊區塊 ==================== -->
+            <div class="space-y-3">
+                
+                <!-- 1. 吃 (FOOD) -->
+                <details class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden" open>
+                    <summary class="bg-emerald-50 px-4 py-3.5 flex justify-between items-center cursor-pointer font-bold text-sm text-emerald-900 select-none">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-utensils text-amber-600"></i> 吃 ｜ Local Food & Restaurants</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </summary>
+                    <div class="p-4 space-y-4 border-t border-emerald-50 text-xs">
+                        <!-- 子分類：台灣小吃 -->
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 台灣小吃 / Taiwanese Street Food</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center"><span>串三甲串燒 (特製甜鹹宵夜首選)</span><a href="https://maps.google.com/?q=中壢串三甲" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>金站熱炒 (經典台式火鍋氣十足)</span><a href="https://maps.google.com/?q=中壢金站" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>阿正魷魚羹 (鮮脆Q彈柴魚香)</span><a href="https://maps.google.com/?q=中壢阿正魷魚羹" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>張家鍋貼水餃 (金黃焦脆焦脆冰花)</span><a href="https://maps.google.com/?q=中壢張家鍋貼水餃" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>范阿婆四果冰 (古早味手工黑糖剉冰)</span><a href="https://maps.google.com/?q=中壢范阿婆四果冰" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>南北餃子館 (厚皮手擀傳統老字號)</span><a href="https://maps.google.com/?q=中壢南北餃子館" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>後站無名麵店 (在地回憶古早味切仔麵)</span><a href="https://maps.google.com/?q=中壢後站無名麵店" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>興南越南法式麵包 (酥脆超澎湃排隊異國風)</span><a href="https://maps.google.com/?q=中壢興南越南法式麵包" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>阿金港式滷味 (獨門香氣濃郁宵夜)</span><a href="https://maps.google.com/?q=中壢阿金港式滷味" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>一心蔥油餅 (經典現煎外酥內軟)</span><a href="https://maps.google.com/?q=中壢一心蔥油餅" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                                <div class="flex justify-between items-center"><span>中壢70年老店榕樹下綿綿冰</span><a href="https://maps.google.com/?q=中壢榕樹下綿綿冰" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-location-dot"></i> Maps</a></div>
+                            </div>
+                        </div>
+
+                        <!-- 子分類：聚會餐廳 -->
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 聚會餐廳 / Featured Dining</h4>
+                            <div class="space-y-3 font-medium">
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>雲南妯娌</strong><a href="https://maps.google.com/?q=中壢區健行路104號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">健行路104號 (傳統風味大推)</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>Love泰廚泰式料理</strong><a href="https://maps.google.com/?q=中壢區中北路二段166-1號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">中北路二段166-1號</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>GOGI GOGI韓式燒肉</strong><a href="https://maps.google.com/?q=中壢區新興路194巷30號1樓" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">新興路194巷30號1樓 (網美風美味)</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>B&C漢堡與雞</strong><a href="https://maps.google.com/?q=中壢區新興路194巷29號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">新興路194巷29號</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>石乘拾石頭火鍋</strong><a href="https://maps.google.com/?q=中壢區中北路二段210號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">中北路二段210號 (台式石頭爆香)</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>Toko Indo CenCen (印尼料理)</strong><a href="https://maps.google.com/?q=中壢區新興路212號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">新興路212號</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>古月新城</strong><a href="https://maps.google.com/?q=中壢區健行路41號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">健行路41號 (複合式包廂茶座)</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>印度餐廳斯瓦格特 (Swagat)</strong><a href="https://maps.google.com/?q=中壢區中北路二段328號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">中北路二段328號</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>壽司郎 (Sushiro)</strong><a href="https://maps.google.com/?q=中壢區中正路170號2樓" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">中正路170號2樓</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>銀花 壽司｜丼飯｜生魚片</strong><a href="https://maps.google.com/?q=中壢區延平路585號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">延平路585號</span>
+                                </div>
+                                <div class="border-l-2 border-emerald-100 pl-2">
+                                    <div class="flex justify-between"><strong>行雲庵板前壽司</strong><a href="https://maps.google.com/?q=中壢區永樂路31號" target="_blank" class="text-amber-600 text-[10px]"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[11px] text-emerald-600 block">永樂路31號 (精緻Omakase)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 子分類：甜點 -->
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 甜點 / Desserts</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center"><span>佳樂精緻蛋糕 (招牌波士頓派必吃)</span><a href="https://maps.google.com/?q=中壢佳樂蛋糕" target="_blank" class="text-[10px] text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                <div class="flex justify-between items-center"><span>透明烤箱 Reliable Oven (精緻乳酪)</span><a href="https://maps.google.com/?q=中壢透明烤箱" target="_blank" class="text-[10px] text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                <div class="flex justify-between items-center"><span>百姈鳥手作烘焙</span><a href="https://maps.google.com/?q=中壢百姈鳥手作烘焙" target="_blank" class="text-[10px] text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 2. 喝 (DRINK & BARS) -->
+                <details class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                    <summary class="bg-emerald-50 px-4 py-3.5 flex justify-between items-center cursor-pointer font-bold text-sm text-emerald-900 select-none">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-wine-glass text-amber-600"></i> 喝 ｜ Tea, Coffee & Bars</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </summary>
+                    <div class="p-4 space-y-4 border-t border-emerald-50 text-xs">
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 精選咖啡廳 / Featured Cafés</h4>
+                            <div class="space-y-3">
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">Kenangan COFFEE 凱娜克咖啡</strong>
+                                        <a href="https://maps.google.com/?q=Kenangan+COFFEE+凱娜克咖啡+中壢中正路1號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區中正路1號 ｜ 每日 10:00–21:30</p>
+                                </div>
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">咖啡曜日 kohi youbi & Shao Leather手工皮件</strong>
+                                        <a href="https://maps.google.com/?q=咖啡曜日+中壢區東明街26號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區東明街26號一樓 ｜ 營業時間請參閱官方 IG / FB</p>
+                                </div>
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">日日籽 Daily Seed Store 咖啡喫雜・二手舊物・Eco Pick</strong>
+                                        <a href="https://maps.google.com/?q=日日籽+Daily+Seed+Store+中壢區東明街27號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區東明街27號 ｜ 營業時間請參閱官方 IG / FB</p>
+                                </div>
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">可凡咖啡</strong>
+                                        <a href="https://maps.google.com/?q=可凡咖啡+中壢區東明街18號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區東明街18號1樓 ｜ 五 18:00–00:00 / 六日 14:00–00:00 (一至四公休)</p>
+                                </div>
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">突奌咖啡喵</strong>
+                                        <a href="https://maps.google.com/?q=突奌咖啡喵+中壢區福州路20號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區福州路20號 ｜ 四至一 11:30–19:00 (每週二、三公休)</p>
+                                </div>
+                                <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100/60 space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <strong class="text-emerald-950 text-[13px]">1000cc Coffee & Cookie</strong>
+                                        <a href="https://maps.google.com/?q=1000cc+Coffee+Cookie+中壢區東昇街57號" target="_blank" class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-location-dot"></i> Map</a>
+                                    </div>
+                                    <p class="text-emerald-700">中壢區東昇街57號 ｜ 每日 11:00–18:30</p>
+                                </div>
+                                <div class="pt-1 font-bold text-emerald-800">• 皇家茶銀行 (Royal Tea Bank)</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 微醺酒吧 / Nightlife Bars</h4>
+                            <div class="space-y-3">
+                                <div class="bg-emerald-50/50 p-2 rounded-xl">
+                                    <div class="flex justify-between font-bold"><span>不醒人室 & SLAP!</span><a href="https://maps.google.com/?q=中壢中正路111號" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[10px] text-emerald-700 block">中正路111號1樓 ｜ 每日 18:00–03:00</span>
+                                </div>
+                                <div class="bg-emerald-50/50 p-2 rounded-xl">
+                                    <div class="flex justify-between font-bold"><span>The Oshare Club 洒落俱樂部</span><a href="https://maps.google.com/?q=中壢大同路103號" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[10px] text-emerald-700 block">大同路103號 ｜ 每日 17:30–01:00</span>
+                                </div>
+                                <div class="bg-emerald-50/50 p-2 rounded-xl">
+                                    <div class="flex justify-between font-bold"><span>Small.Kitto 去哪酒吧</span><a href="https://maps.google.com/?q=中壢延平路552號B1" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[10px] text-emerald-700 block">延平路552號B1 ｜ 三~日 20:00–01:00 (一二休)</span>
+                                </div>
+                                <div class="bg-emerald-50/50 p-2 rounded-xl">
+                                    <div class="flex justify-between font-bold"><span>Posino Skyland</span><a href="https://maps.google.com/?q=中壢中正路170號6樓" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a></div>
+                                    <span class="text-[10px] text-emerald-700 block">中正路170號6樓 ｜ 每日 18:00–02:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 3. 玩 (ENTERTAINMENT) -->
+                <details class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                    <summary class="bg-emerald-50 px-4 py-3.5 flex justify-between items-center cursor-pointer font-bold text-sm text-emerald-900 select-none">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-gamepad text-amber-600"></i> 玩 ｜ Real-Life Games</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </summary>
+                    <div class="p-4 border-t border-emerald-50 text-xs">
+                        <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-200 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-emerald-950 text-sm">胖胖工作室 x 密室逃脫 Fatmily</h4>
+                                <p class="text-emerald-700 text-[11px] mt-1">地址：中壢區新興路252號 (飯店步行極近)</p>
+                                <p class="text-amber-700 font-mono text-[10px] mt-0.5"><i class="fa-regular fa-clock"></i> 每日 10:00–22:00</p>
+                            </div>
+                            <a href="https://maps.google.com/?q=胖胖工作室密室逃脫" target="_blank" class="text-xs bg-emerald-800 text-amber-500 font-bold px-2.5 py-1 rounded-lg"><i class="fa-solid fa-location-dot"></i> Map</a>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 4. 樂 (LANDMARKS) -->
+                <details class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                    <summary class="bg-emerald-50 px-4 py-3.5 flex justify-between items-center cursor-pointer font-bold text-sm text-emerald-900 select-none">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-icons text-amber-600"></i> 樂 ｜ Shopping & Night Markets</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </summary>
+                    <div class="p-4 space-y-4 border-t border-emerald-50 text-xs">
+                        <!-- 商圈夜市 -->
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 繁華商圈與夜市 / Markets</h4>
+                            <div class="grid grid-cols-2 gap-2 text-center text-[11px]">
+                                <a href="https://maps.google.com/?q=中平商圈徒步區" target="_blank" class="bg-emerald-50 p-2 rounded-xl font-bold border border-emerald-100">中平商圈徒步區</a>
+                                <a href="https://maps.google.com/?q=中壢觀光夜市" target="_blank" class="bg-emerald-50 p-2 rounded-xl font-bold border border-emerald-100">中壢新明夜市</a>
+                                <a href="https://maps.google.com/?q=快中原夜市" target="_blank" class="bg-emerald-50 p-2 rounded-xl font-bold border border-emerald-100 col-span-2">中原大學觀光夜市</a>
+                            </div>
+                        </div>
+                        <!-- 青埔核心地標 -->
+                        <div>
+                            <h4 class="font-bold text-amber-700 border-b border-amber-100 pb-1 mb-2">● 熱門核心景點 / Top Attractions</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center"><span>桃園市兒童美術館 ｜ 青埔美學新地標</span><a href="https://maps.google.com/?q=桃園市兒童美術館" target="_blank" class="text-amber-600"><i class="fa-solid fa-map-pin"></i></a></div>
+                                <div class="flex justify-between items-center"><span>華泰名品城 GLORIA OUTLETS ｜ 露天精品</span><a href="https://maps.google.com/?q=華泰名品城" target="_blank" class="text-amber-600"><i class="fa-solid fa-map-pin"></i></a></div>
+                                <div class="flex justify-between items-center"><span>XPARK 水族館 ｜ 日系都會型水生公園</span><a href="https://maps.google.com/?q=Xpark" target="_blank" class="text-amber-600"><i class="fa-solid fa-map-pin"></i></a></div>
+                                <div class="flex justify-between items-center"><span>樂天桃園棒球場 ｜ 體驗熱血中職應援</span><a href="https://maps.google.com/?q=桃園國際棒球場" target="_blank" class="text-amber-600"><i class="fa-solid fa-map-pin"></i></a></div>
+                                <div class="flex justify-between items-center"><span>大江國際購物中心 MetroWalk ｜ 好停車好逛</span><a href="https://maps.google.com/?q=大江國際購物中心" target="_blank" class="text-amber-600"><i class="fa-solid fa-map-pin"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 5. 伴手禮 (GIFTS) -->
+                <details class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                    <summary class="bg-emerald-50 px-4 py-3.5 flex justify-between items-center cursor-pointer font-bold text-sm text-emerald-900 select-none">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-gift text-amber-600"></i> 伴手禮 ｜ Taiwan Souvenirs</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </summary>
+                    <div class="p-4 border-t border-emerald-50 text-xs space-y-3">
+                        <div class="flex justify-between items-center p-2 bg-emerald-50/30 rounded-xl">
+                            <div><strong>三角店菜包</strong><span class="block text-[11px] text-emerald-600">經典客家傳統米食點心</span></div>
+                            <a href="https://maps.google.com/?q=中壢三角店菜包" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-emerald-50/30 rounded-xl">
+                            <div><strong>之味花生糖</strong><span class="block text-[11px] text-emerald-600">中壢老字號古早味花生糖</span></div>
+                            <a href="https://maps.google.com/?q=中壢之味花生糖" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-emerald-50/30 rounded-xl">
+                            <div><strong>龍情花生糖</strong><span class="block text-[11px] text-emerald-600">桃園知名、口味多元的香脆伴手禮</span></div>
+                            <a href="https://maps.google.com/?q=中壢龍情花生糖" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-emerald-50/30 rounded-xl">
+                            <div><strong>張豐盛商行</strong><span class="block text-[11px] text-emerald-600">老字號極濃花生醬、獨特爆米香霜淇淋</span></div>
+                            <a href="https://maps.google.com/?q=張豐盛商行" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-emerald-50/30 rounded-xl">
+                            <div><strong>新東陽肉乾 (Hsin Tung Yang)</strong><span class="block text-[11px] text-emerald-600">台灣代表性肉製品 (提醒：注意各國入境限制)</span></div>
+                            <a href="https://maps.google.com/?q=中壢新東陽" target="_blank" class="text-amber-600"><i class="fa-solid fa-location-dot"></i></a>
+                        </div>
+                    </div>
+                </details>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== 3. WALLET PAGE (換算與記帳 - 新增日韓幣) ==================== -->
+        <section id="page-wallet" class="page-content space-y-5">
+            <!-- 多國匯率面板 -->
+            <div class="bg-emerald-900 text-white rounded-2xl p-4 border border-amber-600/20 shadow-md space-y-3.5">
+                <div class="flex justify-between items-center border-b border-emerald-800 pb-2">
+                    <h3 class="luxury-title font-bold text-amber-500 text-sm flex items-center gap-1.5"><i class="fa-solid fa-calculator"></i> Multi-Currency Engine / 六國匯率雙向換算</h3>
+                    <span class="text-[10px] bg-emerald-800 text-amber-400 px-2 py-0.5 rounded-md font-mono">2026 Rate</span>
+                </div>
+                
+                <!-- 匯率基準值（新增日元、韓元輸入框） -->
+                <div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-800/60 space-y-2">
+                    <span class="text-[10px] text-emerald-300 font-bold block"><i class="fa-solid fa-sliders mr-1 text-amber-500"></i>匯率基準 (1 外幣 = 多少 TWD)</span>
+                    <div class="grid grid-cols-3 gap-2 text-[10px] font-mono text-center">
+                        <div><label class="block text-emerald-200/70 mb-0.5">美金 USD</label><input type="number" id="rate-set-usd" value="32.50" step="0.01" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                        <div><label class="block text-emerald-200/70 mb-0.5">日圓 JPY</label><input type="number" id="rate-set-jpy" value="0.21" step="0.001" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                        <div><label class="block text-emerald-200/70 mb-0.5">韓元 KRW</label><input type="number" id="rate-set-krw" value="0.024" step="0.0001" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-[10px] font-mono text-center pt-1">
+                        <div><label class="block text-emerald-200/70 mb-0.5">港幣 HKD</label><input type="number" id="rate-set-hkd" value="4.15" step="0.01" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                        <div><label class="block text-emerald-200/70 mb-0.5">澳門 MOP</label><input type="number" id="rate-set-mop" value="4.03" step="0.01" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                        <div><label class="block text-emerald-200/70 mb-0.5">新幣 SGD</label><input type="number" id="rate-set-sgd" value="24.20" step="0.01" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 rounded-lg p-1 font-bold text-center text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- 雙向即時輸入與六國結果 -->
+                <div class="space-y-3 pt-1">
+                    <div class="bg-emerald-800/40 p-3 rounded-xl border border-emerald-700/50 space-y-2">
+                        <div class="flex items-center gap-1.5 text-xs text-amber-400 font-bold"><span class="bg-amber-500 text-emerald-950 w-4 h-4 rounded-full flex items-center justify-center text-[10px]">1</span><span>台幣轉多國外幣</span></div>
+                        <div class="relative">
+                            <input type="text" id="calc-input-twd" placeholder="輸入台幣金額 (例如: 1000)" oninput="runMasterExchangeEngine()" class="w-full bg-white text-emerald-950 font-mono font-bold rounded-xl p-2 text-xs text-right pr-10 focus:outline-none">
+                            <span class="absolute right-2.5 top-2 text-[10px] text-emerald-800 font-bold">NT$</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono pt-1">
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇺🇸 USD</span><span id="res-to-usd" class="text-white font-bold block">$ 0.00</span></div>
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇯🇵 JPY</span><span id="res-to-jpy" class="text-white font-bold block">¥ 0.00</span></div>
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇰🇷 KRW</span><span id="res-to-krw" class="text-white font-bold block">₩ 0.00</span></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇭🇰 HKD</span><span id="res-to-hkd" class="text-white font-bold block">$ 0.00</span></div>
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇲🇴 MOP</span><span id="res-to-mop" class="text-white font-bold block">$ 0.00</span></div>
+                            <div class="bg-emerald-950/40 p-1.5 rounded-lg"><span class="text-emerald-300 block">🇸🇬 SGD</span><span id="res-to-sgd" class="text-white font-bold block">$ 0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 旅行記帳 -->
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-3">
+                <h3 class="luxury-title font-bold text-emerald-900 text-sm flex items-center gap-1.5"><i class="fa-solid fa-cash-register text-amber-600"></i>Add Expense / 新增旅行記帳</h3>
+                <form id="expense-form" onsubmit="saveNewExpenseData(event)" class="space-y-3 text-xs">
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="exp-title" placeholder="品項" required class="w-full bg-emerald-50/50 rounded-xl p-2.5 text-emerald-900">
+                        <input type="number" id="exp-amount-foreign" placeholder="金額" required class="w-full bg-emerald-50/50 rounded-xl p-2.5">
+                        <select id="exp-currency-type" class="w-full bg-emerald-50/50 rounded-xl p-2.5 font-bold text-emerald-800">
+                            <option value="TWD">台幣 (TWD)</option><option value="USD">美金 (USD)</option>
+                            <option value="JPY">日圓 (JPY)</option><option value="KRW">韓元 (KRW)</option>
+                            <option value="HKD">港幣 (HKD)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-800 text-white font-bold py-2.5 rounded-xl shadow-sm">儲存消費</button>
+                </form>
+                <div id="expense-records-list" class="space-y-2 pt-2"></div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 4. LISTS PAGE (打包核取清單 - BUG修正完美顯示) ==================== -->
+        <section id="page-lists" class="page-content space-y-5">
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-4">
+                <h3 class="luxury-title font-bold text-emerald-900 text-sm border-b border-emerald-50 pb-2"><i class="fa-solid fa-clipboard-list text-amber-600 mr-1"></i>Checklists 行前準備與行李打包</h3>
+                
+                <!-- 區塊一：行前重要申請 -->
+                <div class="space-y-2">
+                    <span class="text-[11px] font-bold text-emerald-800 block bg-emerald-50 Tri px-2 py-0.5 rounded-md border-l-2 border-amber-500">事先準備與申請 / Pre-apply</span>
+                    <div id="chk-section-pre" class="space-y-2 text-xs">
+                        <!-- 由 JS 自動渲染注入，支援多裝置記憶狀態 -->
+                    </div>
+                </div>
+                
+                <!-- 區塊二：隨身必備行李 -->
+                <div class="space-y-2 pt-1">
+                    <span class="text-[11px] font-bold text-emerald-800 block bg-emerald-50 px-2 py-0.5 rounded-md border-l-2 border-amber-500">行李打包清單 / Packing Items</span>
+                    <div id="chk-section-carry" class="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+                        <!-- 由 JS 自動渲染注入 -->
+                    </div>
+                </div>
+                
+                <!-- 區塊三：兒童/備用隨身 -->
+                <div class="space-y-2 pt-1">
+                    <span class="text-[11px] font-bold text-amber-700 block bg-amber-50 px-2 py-0.5 rounded-md border-l-2 border-amber-600">攜帶孩童隨身清單 / Kids Checklist</span>
+                    <div id="chk-section-kids" class="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+                        <!-- 由 JS 自動渲染注入 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 5. INFO PAGE (生活機能與公共安全) ==================== -->
+        <section id="page-info" class="page-content space-y-5">
+            
+            <!-- 獨立劃分出的核心生活機能區塊 -->
+            <div class="bg-white rounded-2xl p-4 border border-amber-600/40 shadow-md space-y-3">
+                <div class="border-b border-amber-100 pb-2 flex items-center gap-2">
+                    <span class="text-amber-600 text-lg"><i class="fa-solid fa-circle-info"></i></span>
+                    <div>
+                        <h3 class="luxury-title font-bold text-emerald-900 text-sm">周邊生活機能 / Local Comforts & Utilities</h3>
+                        <p class="text-[10px] text-emerald-600">步行火車站商圈周圍最實用的在地生活指標</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 text-xs">
+                    <!-- 換匯與銀行 -->
+                    <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100 space-y-2">
+                        <strong class="text-emerald-950 font-bold block"><i class="fa-solid fa-money-bill-transfer text-amber-600 mr-1"></i>💵 換匯與外幣銀行服務 (Banks with Exchange)</strong>
+                        <div class="space-y-1.5 text-[11px]">
+                            <div class="flex justify-between items-center">
+                                <span>• <b>中國信託 中壢分行</b> (中壢區中央東路50號)</span>
+                                <a href="https://maps.google.com/?q=中國信託商業銀行+中壢分行" target="_blank" class="text-amber-600 font-bold text-[10px]"><i class="fa-solid fa-location-dot"></i> Map</a>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>• <b>玉山銀行 中壢分行</b> (中壢區中央東路88號)</span>
+                                <a href="https://maps.google.com/?q=玉山銀行+中壢分行" target="_blank" class="text-amber-600 font-bold text-[10px]"><i class="fa-solid fa-location-dot"></i> Map</a>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>• <b>台北富邦 中壢分行</b> (中壢區延平路566號)</span>
+                                <a href="https://maps.google.com/?q=台北富邦銀行+中壢分行" target="_blank" class="text-amber-600 font-bold text-[10px]"><i class="fa-solid fa-location-dot"></i> Map</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 專業舒壓按摩 -->
+                    <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100 space-y-1.5">
+                        <strong class="text-emerald-950 font-bold block"><i class="fa-solid fa-spa text-amber-600 mr-1"></i>💆‍♂️ 專業舒壓按摩 (Massage Shops)</strong>
+                        <div class="flex justify-between text-[11px]"><span>足旅 (後站出口1分鐘, 10:00~23:30)</span><a href="https://maps.google.com/?q=中壢足旅" target="_blank" class="text-amber-600 font-bold"><i class="fa-solid fa-location-dot"></i></a></div>
+                        <div class="flex justify-between text-[11px]"><span>舒心堂 (東興街113號, 11:30~01:00)</span><a href="https://maps.google.com/?q=中壢舒心堂" target="_blank" class="text-amber-600 font-bold"><i class="fa-solid fa-location-dot"></i></a></div>
+                    </div>
+
+                    <!-- 24H及連鎖藥局 -->
+                    <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100 space-y-1.5">
+                        <strong class="text-emerald-950 font-bold block"><i class="fa-solid fa-capsules text-amber-600 mr-1"></i>💊 連鎖與在地健保藥局 (Pharmacies)</strong>
+                        <div class="flex justify-between text-[11px]"><span>佳美藥局 (08:00~21:00)</span><a href="https://maps.google.com/?q=中壢佳美藥局" target="_blank" class="text-amber-600 font-bold"><i class="fa-solid fa-location-dot"></i></a></div>
+                        <div class="flex justify-between text-[11px]"><span>全球藥局同慶店 (09:00~22:00)</span><a href="https://maps.google.com/?q=全球藥局健行路" target="_blank" class="text-amber-600 font-bold"><i class="fa-solid fa-location-dot"></i></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 各國駐台機構 / Embassy and Mission Info -->
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-3">
+                <div class="border-b border-emerald-50 pb-2">
+                    <h3 class="luxury-title font-bold text-emerald-900 text-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-building-shield text-emerald-800"></i> Embassies & Missions / 駐台使館及代表處
+                    </h3>
+                </div>
+                
+                <div class="space-y-3 text-[11px] leading-relaxed">
+                    <div class="p-2 bg-emerald-50/60 rounded-xl">
+                        <span class="font-bold block text-emerald-950">🇺🇸 美國 AIT (American Institute in Taiwan)</span>
+                        <p class="text-emerald-700">Tel: <a href="tel:+886221622000" class="underline font-bold text-emerald-900">+886 2-2162-2000</a><br>台北市內湖區金湖路100號</p>
+                    </div>
+                    <div class="p-2 bg-emerald-50/60 rounded-xl">
+                        <span class="font-bold block text-emerald-950">🇯🇵 日本台灣交流協會 (Japan-Taiwan Exchange Association)</span>
+                        <p class="text-emerald-700">Tel: <a href="tel:+886227138000" class="underline font-bold text-emerald-900">+886 2-2713-8000</a><br>台北市松山區慶城街28號</p>
+                    </div>
+                    <div class="p-2 bg-emerald-50/60 rounded-xl">
+                        <span class="font-bold block text-emerald-950">🇰🇷 駐台北韓國代表部 (Korean Mission in Taipei)</span>
+                        <p class="text-emerald-700">Tel: <a href="tel:+886227588320" class="underline font-bold text-emerald-900">+886 2-2758-8320</a><br>台北市信義區基隆路一段333號15樓</p>
+                    </div>
+                    <div class="p-2 bg-emerald-50/60 rounded-xl">
+                        <span class="font-bold block text-emerald-950">🇲🇾 新加坡 / 馬來西亞 駐台辦事處 (SG & MY Trade Office)</span>
+                        <p class="text-emerald-700">
+                            新加坡 SG: <a href="tel:+886227721940" class="underline text-emerald-900">+886 2-2772-1940</a><br>
+                            馬來西亞 MY: <a href="tel:+886227132626" class="underline text-emerald-900">+886 2-2713-2626</a>
+                        </p>
+                    </div>
+                    <div class="p-2 bg-emerald-50/60 rounded-xl">
+                        <span class="font-bold block text-emerald-950">🇭🇰 澳門 / 香港旅客緊急求助 (HK & Macau Emergency Support)</span>
+                        <p class="text-emerald-700">可直撥台灣內政部移民署專線：<a href="tel:+886223889393" class="underline font-bold text-emerald-900">+886 2-2388-9393</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 在地醫療援助 -->
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-3">
+                <h3 class="luxury-title font-bold text-emerald-900 text-sm flex items-center gap-1.5"><i class="fa-solid fa-truck-medical text-red-600"></i> Medical Assistance / 當地中壢大型醫院</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="p-2.5 bg-red-50 rounded-xl border border-red-100 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold block text-red-900">天晟醫院 (Ten-Chen Hospital) - 24H 急診</span>
+                            <span class="text-[11px] text-emerald-700 block">延平路155號 / 飯店車程5分鐘</span>
+                        </div>
+                        <a href="tel:+88634622321" class="font-mono font-bold text-red-700 bg-white px-2 py-1 rounded-lg border border-red-200">+886-3-462-2321</a>
+                    </div>
+                    <div class="p-2.5 bg-red-50 rounded-xl border border-red-100 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold block text-red-900">華揚醫院 (Hua-Yang Hospital)</span>
+                            <span class="text-[11px] text-emerald-700 block">中北路二段316號7樓</span>
+                        </div>
+                        <a href="tel:+88634577111" class="font-mono font-bold text-red-700 bg-white px-2 py-1 rounded-lg border border-red-200">+886-3-457-7111</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 台灣緊急求救電話 -->
+            <div class="bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-2">
+                <h3 class="luxury-title font-bold text-emerald-900 text-xs text-amber-600">Taiwan Emergency Hotline / 台灣報案與火警</h3>
+                <div class="grid grid-cols-2 gap-2 text-center text-xs font-mono font-bold">
+                    <a href="tel:110" class="bg-emerald-800 text-white p-2 rounded-xl">POLICE 警察局 (110)</a>
+                    <a href="tel:119" class="bg-red-700 text-white p-2 rounded-xl">AMBULANCE 火警/救護 (119)</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BOTTOM FIXED NAV BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-emerald-900 border-t border-amber-600/30 shadow-lg z-40">
+        <div class="max-w-md mx-auto grid grid-cols-5 text-center py-2.5 text-[10px] font-bold tracking-wider text-white">
+            <button onclick="navigateTab('plan')" id="btn-nav-plan" class="nav-button-item text-amber-500 flex flex-col items-center gap-1"><i class="fa-solid fa-map-location text-lg"></i>PLAN</button>
+            <button onclick="navigateTab('guide')" id="btn-nav-guide" class="nav-button-item text-emerald-100/50 flex flex-col items-center gap-1"><i class="fa-solid fa-utensils text-lg"></i>GUIDE</button>
+            <button onclick="navigateTab('wallet')" id="btn-nav-wallet" class="nav-button-item text-emerald-100/50 flex flex-col items-center gap-1"><i class="fa-solid fa-wallet text-lg"></i>WALLET</button>
+            <button onclick="navigateTab('lists')" id="btn-nav-lists" class="nav-button-item text-emerald-100/50 flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-lg"></i>LISTS</button>
+            <button onclick="navigateTab('info')" id="btn-nav-info" class="nav-button-item text-emerald-100/50 flex flex-col items-center gap-1"><i class="fa-solid fa-circle-nodes text-lg"></i>INFO</button>
+        </div>
+    </nav>
+
+    <!-- ==================== JAVASCRIPT CORE ==================== -->
+    <script>
+        // 行前重要打包與行前準備資料庫
+        const defaultPackingDataset = {
+            pre: [
+                "確認護照效期 (須滿6個月以上)",
+                "辦理台灣簽證 / 機場入國登記表網上填寫",
+                "預訂旅遊平安險與不便險",
+                "開通海外刷卡與ATM提款功能"
+            ],
+            carry: [
+                "護照正本與機票確認單",
+                "台幣現金或海外回饋信用卡",
+                "手機與萬國轉接頭/充電線",
+                "高容量行動電源 (不可托運)",
+                "個人必備隨身藥品",
+                "折疊雨傘或輕便雨衣"
+            ],
+            kids: [
+                "幼童護照與身分證明文件",
+                "奶粉/防漏水壺/小零食",
+                "小林退熱貼/耳溫槍/常備藥",
+                "濕紙巾與隨身尿布",
+                "輕便型折疊嬰兒推車"
+            ]
+        };
+
+        let itineraries = JSON.parse(localStorage.getItem('via_itineraries_v3')) || [
+            { id: 101, title: "Day 1 ｜ 抵達中壢與精選行程探索" }
+        ];
+        let expensesDataList = JSON.parse(localStorage.getItem('via_expenses_v4')) || [];
+
+        window.onload = function() {
+            loadCoreInfoFields();
+            renderDynamicItineraries();
+            renderPackingChecklistsRows(); // 核心：渲染核取清單
+            renderExpensesRecordsTable();
+            runMasterExchangeEngine();     // 初始化六國匯率
+        };
+
+        function navigateTab(targetId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-button-item').forEach(b => {
+                b.classList.remove('text-amber-500'); b.classList.add('text-emerald-100/50');
+            });
+            document.getElementById(`page-${targetId}`).classList.add('active');
+            document.getElementById(`btn-nav-${targetId}`).classList.remove('text-emerald-100/50');
+            document.getElementById(`btn-nav-${targetId}`).classList.add('text-amber-500');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function saveCoreInfo(key, val) { localStorage.setItem(`via_core_v3_${key}`, val); }
+        function loadCoreInfoFields() {
+            document.getElementById('input-flight').value = localStorage.getItem('via_core_v3_flight') || "";
+        }
+
+        function renderDynamicItineraries() {
+            const wrapper = document.getElementById('itinerary-container');
+            wrapper.innerHTML = "";
+            itineraries.forEach((day) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 border border-emerald-100 shadow-sm space-y-2";
+                const memoVal = localStorage.getItem(`via_day_memo_v3_${day.id}`) || "";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center bg-emerald-50 p-2 rounded-xl">
+                        <input type="text" value="${day.title}" onchange="updateDayTitle(${day.id}, this.value)" class="bg-transparent font-bold text-xs text-emerald-900 focus:outline-none w-4/5">
+                        <button onclick="deleteDayItinerary(${day.id})" class="text-red-500 text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <textarea oninput="localStorage.setItem('via_day_memo_v3_${day.id}', this.value)" class="w-full bg-emerald-50/30 border border-emerald-100 rounded-xl p-2 text-xs focus:outline-none" rows="3" placeholder="編輯今日詳細行程內容...">${memoVal}</textarea>
+                `;
+                wrapper.appendChild(card);
+            });
+        }
+
+        function addNewItinerary() {
+            itineraries.push({ id: Date.now(), title: `Day ${itineraries.length + 1} ｜ 新增行程天數` });
+            localStorage.setItem('via_itineraries_v3', JSON.stringify(itineraries));
+            renderDynamicItineraries();
+        }
+        function updateDayTitle(id, val) {
+            itineraries = itineraries.map(d => d.id === id ? {...d, title: val} : d);
+            localStorage.setItem('via_itineraries_v3', JSON.stringify(itineraries));
+        }
+        function deleteDayItinerary(id) {
+            if(confirm("確定刪除此天行程？")) {
+                itineraries = itineraries.filter(d => d.id !== id);
+                localStorage.setItem('via_itineraries_v3', JSON.stringify(itineraries));
+                renderDynamicItineraries();
+            }
+        }
+
+        // 核心：六國換算引擎 (TWD 轉多國外幣)
+        function runMasterExchangeEngine() {
+            const rUSD = parseFloat(document.getElementById('rate-set-usd').value) || 32.5;
+            const rJPY = parseFloat(document.getElementById('rate-set-jpy').value) || 0.21;
+            const rKRW = parseFloat(document.getElementById('rate-set-krw').value) || 0.024;
+            const rHKD = parseFloat(document.getElementById('rate-set-hkd').value) || 4.15;
+            const rMOP = parseFloat(document.getElementById('rate-set-mop').value) || 4.03;
+            const rSGD = parseFloat(document.getElementById('rate-set-sgd').value) || 24.2;
+
+            const rawTwd = document.getElementById('calc-input-twd').value.trim();
+            let valTwd = parseFloat(rawTwd) || 0;
+
+            document.getElementById('res-to-usd').innerText = `$ ${(valTwd / rUSD).toFixed(2)}`;
+            document.getElementById('res-to-jpy').innerText = `¥ ${(valTwd / rJPY).toFixed(1)}`;
+            document.getElementById('res-to-krw').innerText = `₩ ${(valTwd / rKRW).toFixed(0)}`;
+            document.getElementById('res-to-hkd').innerText = `$ ${(valTwd / rHKD).toFixed(2)}`;
+            document.getElementById('res-to-mop').innerText = `$ ${(valTwd / rMOP).toFixed(2)}`;
+            document.getElementById('res-to-sgd').innerText = `$ ${(valTwd / rSGD).toFixed(2)}`;
+        }
+
+        function saveNewExpenseData(event) {
+            event.preventDefault();
+            const item = {
+                uid: Date.now(),
+                title: document.getElementById('exp-title').value,
+                amount: document.getElementById('exp-amount-foreign').value,
+                currency: document.getElementById('exp-currency-type').value
+            };
+            expensesDataList.unshift(item);
+            localStorage.setItem('via_expenses_v4', JSON.stringify(expensesDataList));
+            renderExpensesRecordsTable();
+            document.getElementById('expense-form').reset();
+        }
+
+        function renderExpensesRecordsTable() {
+            const box = document.getElementById('expense-records-list');
+            box.innerHTML = "";
+            expensesDataList.forEach(e => {
+                const row = document.createElement('div');
+                row.className = "bg-emerald-50/50 p-2 rounded-xl flex justify-between text-xs";
+                row.innerHTML = `<span>${e.title} (${e.amount} ${e.currency})</span><button onclick="removeExpense(${e.uid})" class="text-red-500">×</button>`;
+                box.appendChild(row);
+            });
+        }
+        function removeExpense(uid) {
+            expensesDataList = expensesDataList.filter(e => e.uid !== uid);
+            localStorage.setItem('via_expenses_v4', JSON.stringify(expensesDataList));
+            renderExpensesRecordsTable();
+        }
+
+        // 核心修正：打包核取清單完美顯示函數
+        function renderPackingChecklistsRows() {
+            const setupBox = (arr, elementId, keyPrefix) => {
+                const el = document.getElementById(elementId);
+                if (!el) return; // 安全防護機制
+                el.innerHTML = "";
+                arr.forEach((item, idx) => {
+                    const key = `via_chk_v3_${keyPrefix}_${idx}`;
+                    const isChecked = localStorage.getItem(key) === 'true';
+                    const label = document.createElement('label');
+                    label.className = "checkbox-container flex items-start gap-2 py-1 select-none w-full";
+                    label.innerHTML = `
+                        <div class="relative flex items-center h-5">
+                            <input type="checkbox" id="${key}" ${isChecked ? 'checked' : ''} onchange="toggleCheckRow('${key}')" class="real-checkbox sr-only">
+                            <div class="custom-box w-4 h-4 rounded border border-emerald-400 bg-white flex items-center justify-center transition-all">
+                                <i class="fa-solid fa-check text-[10px] text-white opacity-0 scale-50 transition-all"></i>
+                            </div>
+                        </div>
+                        <span class="text-label text-emerald-800 ${isChecked ? 'line-through text-emerald-300' : ''}">${item}</span>
+                    `;
+                    el.appendChild(label);
+                });
+            };
+            
+            // 精準對應頁面中的中底線 ID 元素，解決舊版本未顯示的臭蟲
+            setupBox(defaultPackingDataset.pre, 'chk-section-pre', 'pre');
+            setupBox(defaultPackingDataset.carry, 'chk-section-carry', 'cry');
+            setupBox(defaultPackingDataset.kids, 'chk-section-kids', 'kid');
+        }
+
+        function toggleCheckRow(key) {
+            const cb = document.getElementById(key);
+            localStorage.setItem(key, cb.checked);
+            const txt = cb.closest('label').querySelector('.text-label');
+            if(cb.checked) { txt.classList.add('line-through', 'text-emerald-300'); }
+            else { txt.classList.remove('line-through', 'text-emerald-300'); }
+        }
+    </script>
+</body>
+</html>
